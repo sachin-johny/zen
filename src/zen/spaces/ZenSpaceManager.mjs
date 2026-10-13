@@ -13,12 +13,6 @@ ChromeUtils.defineESModuleGetters(lazy, {
   ZenSessionStore: "resource:///modules/zen/ZenSessionManager.sys.mjs",
 });
 
-ChromeUtils.defineESModuleGetters(
-  lazy,
-  { ZenLibrary: "moz-src:///zen/library/ZenLibrary.mjs" },
-  { global: "current" }
-);
-
 ChromeUtils.defineLazyGetter(lazy, "graphemes", () => new Intl.Segmenter());
 
 ChromeUtils.defineLazyGetter(lazy, "browserBackgroundElement", () => {
@@ -1313,9 +1307,6 @@ class nsZenWorkspaces {
     } else {
       openInContainerMenuItem.setAttribute("hidden", "true");
     }
-    // Spaces are managed from the library, so the entry needs it enabled.
-    document.getElementById("context_zenManageWorkspaces").hidden =
-      !Services.prefs.getBoolPref("zen.library.enabled");
     // Call parent node as on windows, the text can be double clicked
     let target;
     try {
@@ -2929,7 +2920,6 @@ class nsZenWorkspaces {
   onPinnedTabsResize(entries, forAnimation = false) {
     if (
       document.documentElement.hasAttribute("inDOMFullscreen") ||
-      lazy.ZenLibrary.isLibrarySlightlyOpen ||
       !this._hasInitializedTabsStrip ||
       (this._organizingWorkspaceStrip && !forAnimation) ||
       document.documentElement.hasAttribute("zen-creating-workspace") ||

@@ -83,8 +83,7 @@
   height: 100%;
 }
 
-#browser,
-zen-library {
+#browser {
   --zen-min-toolbox-padding: 5px;
   @media (-moz-platform: macos) {
     --zen-min-toolbox-padding: 6px;
@@ -256,8 +255,7 @@ zen-library {
 /* ==========================================================================
    Navigator Toolbox (Main Sidebar Container) Base Styles
    ========================================================================== */
-#navigator-toolbox,
-.zen-library-space-body {
+#navigator-toolbox {
   --border-radius-medium: 14px;
   --tab-border-radius: 8px;
 
@@ -471,8 +469,7 @@ zen-library {
 }
 
 @media (-moz-platform: macos) {
-  #zen-sidebar-foot-buttons,
-  #zen-library-footer {
+  #zen-sidebar-foot-buttons {
     --zen-toolbar-button-size: 20px;
   }
 }
@@ -542,7 +539,7 @@ zen-library {
   }
 }
 
-:is(#navigator-toolbox, .zen-library-space-body)[zen-sidebar-expanded="true"] {
+#navigator-toolbox[zen-sidebar-expanded="true"] {
   --zen-toolbox-min-width: 163px;
 
   padding: var(--zen-toolbox-padding);

@@ -12,7 +12,6 @@ DIRS += [
     "compact-mode",
     "drag-and-drop",
     "glance",
-    "library",
     "live-folders",
     "mods",
     "tests",

@@ -13,13 +13,6 @@ XPCOMUtils.defineLazyPreferenceGetter(
   2
 );
 
-XPCOMUtils.defineLazyPreferenceGetter(
-  lazy,
-  "libraryEnabled",
-  "zen.library.enabled",
-  true
-);
-
 ChromeUtils.defineLazyGetter(lazy, "l10n", () => {
   return new Localization(["browser/zen-command-palette.ftl"], true);
 });
@@ -43,14 +36,6 @@ const globalActionsTemplate = [
     l10nId: "zen-action-open-theme-picker",
     command: "cmd_zenOpenZenThemePicker",
     icon: "chrome://browser/skin/zen-icons/paintbrush-fill.svg",
-  },
-  {
-    l10nId: "zen-action-open-library",
-    command: "cmd_zenToggleLibrary",
-    icon: "chrome://browser/skin/zen-icons/library.svg",
-    isAvailable: () => {
-      return lazy.libraryEnabled;
-    },
   },
   {
     l10nId: "zen-action-new-split-view",

@@ -5,24 +5,10 @@
 {
   const lazy = {};
 
-  ChromeUtils.defineESModuleGetters(
-    lazy,
-    {
-      ZenLibrary: "moz-src:///zen/library/ZenLibrary.mjs",
-    },
-    { global: "current" }
-  );
-
   ChromeUtils.defineESModuleGetters(lazy, {
     ZenLiveFoldersManager:
       "resource:///modules/zen/ZenLiveFoldersManager.sys.mjs",
   });
-
-  const ZEN_LIBRARY_TARGETS = {
-    "Browser:ShowAllHistory": "history",
-    key_gotoHistory: "history",
-    "Tools:Downloads": "downloads",
-  };
 
   const WORKSPACE_SWITCH_COMMAND_PREFIX = "cmd_zenWorkspaceSwitch";
 
@@ -52,7 +38,6 @@
         ),
       }),
     cmd_zenChangeWorkspaceIcon: () => gZenWorkspaces.changeWorkspaceIcon(),
-    cmd_zenManageWorkspaces: () => lazy.ZenLibrary.toggle("spaces"),
     cmd_zenOpenWorkspaceCreation: () => gZenWorkspaces.openWorkspaceCreation(),
     cmd_zenCloseUnpinnedTabs: () => gZenWorkspaces.closeAllUnpinnedTabs(),
     cmd_zenUnloadWorkspace: () => gZenWorkspaces.unloadWorkspace(),
@@ -123,7 +108,6 @@
     cmd_zenOpenZenThemePicker: event => gZenThemePicker.openThemePicker(event),
     cmd_zenNewNavigatorUnsynced: () =>
       OpenBrowserWindow({ zenSyncedWindow: false }),
-    cmd_zenToggleLibrary: () => lazy.ZenLibrary.toggle(),
   };
 
   function handleZenCommand(event) {
@@ -141,19 +125,6 @@
     }
     gZenGlanceManager.handleMainCommandSet(event);
   }
-
-  document.addEventListener(
-    "command",
-    event => {
-      const tab = ZEN_LIBRARY_TARGETS[event.target.id];
-      if (!tab || !Services.prefs.getBoolPref("zen.library.enabled")) {
-        return;
-      }
-      event.stopPropagation();
-      lazy.ZenLibrary.toggle(tab);
-    },
-    true
-  );
 
   document.addEventListener(
     "MozBeforeInitialXULLayout",

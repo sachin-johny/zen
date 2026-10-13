@@ -2,15 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-const lazy = {};
-
 const SVG_NS = "http://www.w3.org/2000/svg";
-
-ChromeUtils.defineESModuleGetters(
-  lazy,
-  { ZenLibrary: "moz-src:///zen/library/ZenLibrary.mjs" },
-  { global: "current" }
-);
 
 export class ZenSpaceAddSwipe {
   #progressVal = 0;
@@ -81,10 +73,6 @@ export class ZenSpaceAddSwipe {
     return this.#progressVal;
   }
 
-  get #libraryOnRight() {
-    return lazy.ZenLibrary.libraryOnRight;
-  }
-
   /**
    * Whether the space add element should show for a swipe starting now. The
    * swipe manager asks once per swipe and remembers the answer itself.
@@ -94,12 +82,9 @@ export class ZenSpaceAddSwipe {
   readySwipeAddSpace() {
     const spaces = gZenWorkspaces.getWorkspaces();
     const current = gZenWorkspaces.getActiveWorkspaceFromCache();
-    const libraryEnabled = Services.prefs.getBoolPref("zen.library.enabled");
-    const libraryOnRight = lazy.ZenLibrary.libraryOnRight;
 
     return (
-      spaces.indexOf(current) === (libraryOnRight ? 0 : spaces.length - 1) &&
-      libraryEnabled &&
+      spaces.indexOf(current) === spaces.length - 1 &&
       gZenWorkspaces.shouldSwipeEdgeActions &&
       !gZenWorkspaces.creatingWorkspaceId
     );
@@ -163,7 +148,7 @@ export class ZenSpaceAddSwipe {
     const DAMPING_DIMENSION = 0.2;
     const RUBBER_BAND_CONSTANT = 0.08;
 
-    const translation = !this.#libraryOnRight ? -gestureAmount : gestureAmount;
+    const translation = -gestureAmount;
     const deltaProgress = translation / ZenSpaceAddSwipe.SUCCESS_THRESHOLD;
 
     let progressDamped;

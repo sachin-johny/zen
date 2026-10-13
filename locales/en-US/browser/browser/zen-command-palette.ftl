@@ -4,7 +4,6 @@
 
 zen-action-toggle-compact-mode = Toggle Compact Mode
 zen-action-open-theme-picker = Open Theme Picker
-zen-action-open-library = Open Library
 zen-action-new-split-view = New Split View
 zen-action-unsplit-view = Expand current view
 zen-action-new-space = New Space

@@ -72,9 +72,6 @@ zen-move-tab-to-workspace-button =
     .label = Move To
     .tooltiptext = Move all tabs in this window to a Space
 
-zen-workspaces-panel-context-manage =
-    .label = Manage Spaces…
-
 zen-workspace-creation-profile = Profile
     .tooltiptext = Profiles are used to separate cookies and site data between spaces.
 zen-workspace-creation-header = Create a Space

@@ -15,7 +15,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
 
 class nsZenUIMigration {
   PREF_NAME = "zen.ui.migration.version";
-  MIGRATION_VERSION = 8;
+  MIGRATION_VERSION = 9;
 
   init(isNewProfile) {
     if (!isNewProfile) {
@@ -25,7 +25,6 @@ class nsZenUIMigration {
         console.error("ZenUIMigration: Error during migration", e);
       }
     }
-    this.#migrateLibraryButton();
     this.clearVariables();
     if (this.shouldRestart) {
       Services.startup.quit(
@@ -54,14 +53,10 @@ class nsZenUIMigration {
     this._migrationVersion = this.MIGRATION_VERSION;
   }
 
-  #migrateLibraryButton() {
-    const donePref = "zen.library.migrated-downloads-button";
-    if (
-      !Services.prefs.getBoolPref("zen.library.enabled", false) ||
-      Services.prefs.getBoolPref(donePref, false)
-    ) {
-      return;
-    }
+  _migrateV9() {
+    // The Zen Library was removed; give the downloads button back the
+    // sidebar footer spot the library button took from it.
+    Services.prefs.clearUserPref("zen.library.migrated-downloads-button");
     // A toolbar's saved placements are only there once a window has it.
     const footButtons = "zen-sidebar-foot-buttons";
     const listener = {
@@ -70,21 +65,21 @@ class nsZenUIMigration {
           return;
         }
         lazy.CustomizableUI.removeListener(listener);
-        Services.prefs.setBoolPref(donePref, true);
-        if (lazy.CustomizableUI.getPlacementOfWidget("zen-library-button")) {
+        const library = lazy.CustomizableUI.getPlacementOfWidget(
+          "zen-library-button"
+        );
+        if (library?.area !== footButtons) {
           return;
         }
-        const downloads =
-          lazy.CustomizableUI.getPlacementOfWidget("downloads-button");
-        const standsIn = downloads?.area === footButtons;
-        lazy.CustomizableUI.addWidgetToArea(
-          "zen-library-button",
-          footButtons,
-          standsIn ? downloads.position : 0
-        );
-        if (standsIn) {
-          lazy.CustomizableUI.removeWidgetFromArea("downloads-button");
+        lazy.CustomizableUI.removeWidgetFromArea("zen-library-button");
+        if (lazy.CustomizableUI.getPlacementOfWidget("downloads-button")) {
+          return;
         }
+        lazy.CustomizableUI.addWidgetToArea(
+          "downloads-button",
+          footButtons,
+          library.position
+        );
       },
     };
     lazy.CustomizableUI.addListener(listener);
